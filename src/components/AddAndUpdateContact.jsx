@@ -3,12 +3,14 @@ import Modal from "./Modal";
 import { Field, Form, Formik } from "formik";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
+import { toast } from "react-toastify";
 
 const AddAndUpdateContact = ({ isOpen, onClose, isUpdate, contact }) => {
   const addContact = async (contact) => {
     try {
       const contactRef = collection(db, "contacts");
       await addDoc(contactRef, contact);
+      toast.success('Contact Added Sucessfully')
       onClose()
     } catch (error) {
       console.log(error);
@@ -18,6 +20,7 @@ const AddAndUpdateContact = ({ isOpen, onClose, isUpdate, contact }) => {
     try {
       const contactRef = doc(db, "contacts", id);
       await updateDoc(contactRef, contact);
+      toast.success('Contact Updated Sucessfully')
       onClose()
     } catch (error) {
       console.log(error);
@@ -53,7 +56,7 @@ const AddAndUpdateContact = ({ isOpen, onClose, isUpdate, contact }) => {
             <label htmlFor="emial">Email</label>
             <Field type="email" name="email" className="h-10 border p-1 " />
           </div>
-          <button className="self-end h-30 w-[8rem] rounded-md font-mono bg-yellow mt-1 p-1 hover:bg-dark-yellow ">
+          <button type="submit" className="self-end h-30 w-[8rem] rounded-md font-mono bg-yellow mt-1 p-1 hover:bg-dark-yellow ">
             {isUpdate ? "Update" : "Add"} Contact
           </button>
         </Form>

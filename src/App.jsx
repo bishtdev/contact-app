@@ -7,6 +7,8 @@ import { db } from "./config/firebase";
 import ContactCard from "./components/ContactCard";
 import AddAndUpdateContact from "./components/AddAndUpdateContact";
 import useDisclouse from "./hooks/useDisclouse";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [contacts, setContacts] = useState([]);
@@ -19,7 +21,6 @@ function App() {
     const getContacts = async () => {
       try {
         const contactsRef = collection(db, "contacts");
-        const contactSnapshot = await getDocs(contactsRef);
 
         onSnapshot(contactsRef,(snapshot)=>{
           const contactLists = snapshot.docs.map((doc) => {
@@ -38,6 +39,31 @@ function App() {
     getContacts();
   }, []);
 
+  const filterContact = (e) =>{
+    const value = e.target.value
+
+    const contactsRef = collection(db, 'contacts')
+
+    onSnapshot(contactsRef, (snapshot)=>{
+      const contactLists = snapshot.docs.map((doc)=>{
+        return{
+          id:doc.id,
+          ...doc.data(),
+        }
+      })
+
+
+      const filteredContacts = contactLists.filter(contact=>
+        contact.name.toLowerCase().includes(value.toLowerCase())
+      )
+      
+      setContacts(filteredContacts)
+
+      return filteredContacts
+
+    })
+  }
+
   return (
     <>
     <div className="mx-auto max-w-[370px] px-4">
@@ -46,6 +72,7 @@ function App() {
         <div className="flex relative items-center flex-grow ">
           <IoSearch className="text-white text-3xl absolute ml-1 " />
           <input
+            onChange={filterContact}
             type="text"
             className=" flex-grow h-10 border border-white bg-transparent rounded-md text-white pl-10"
           />
@@ -59,6 +86,8 @@ function App() {
       </div>
     </div>
         <AddAndUpdateContact isOpen={isOpen} onClose={onClose}/>
+        <ToastContainer
+        position="bottom-center"/>
     </>
   );
 }

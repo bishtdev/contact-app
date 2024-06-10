@@ -6,11 +6,13 @@ import { RxPencil2 } from "react-icons/rx";
 import { db } from "../config/firebase";
 import AddAndUpdateContact from "./AddAndUpdateContact";
 import useDisclouse from "../hooks/useDisclouse";
+import { toast } from "react-toastify";
 
 const ContactCard = ({ contact }) => {
   const deleteContact = async (id) => {
     try {
       await deleteDoc(doc(db, "contacts", id));
+      toast.success('Contact Deleted Sucessfully')
     } catch (error) {
       console.log(error);
     }
