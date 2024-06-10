@@ -6,19 +6,12 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "./config/firebase";
 import ContactCard from "./components/ContactCard";
 import AddAndUpdateContact from "./components/AddAndUpdateContact";
+import useDisclouse from "./hooks/useDisclouse";
 
 function App() {
   const [contacts, setContacts] = useState([]);
 
-  const [isOpen, setOpen] = useState(false); //for operating the modal
-
-  const onOpen = () => {
-    setOpen(true);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
+  const {isOpen, onClose, onOpen} = useDisclouse(); //for operating the modal
 
   useEffect(() => {
     const getContacts = async () => {
