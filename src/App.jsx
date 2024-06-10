@@ -8,9 +8,20 @@ import { db } from "./config/firebase";
 import { FiTrash } from "react-icons/fi";
 import { RxPencil2 } from "react-icons/rx";
 import ContactCard from "./components/ContactCard";
+import Modal from "./components/Modal";
 
 function App() {
   const [contacts, setContacts] = useState([]);
+
+  const [isOpen, setOpen] = useState(false);
+
+  const onOpen = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     const getContacts = async () => {
@@ -32,6 +43,7 @@ function App() {
   }, []);
 
   return (
+    <>
     <div className="mx-auto max-w-[370px] px-4">
       <Navbar />
       <div className="flex gap-2">
@@ -42,15 +54,16 @@ function App() {
             className=" flex-grow h-10 border border-white bg-transparent rounded-md text-white pl-10"
           />
         </div>
-
-        <IoAddCircleOutline className="flex text-white text-5xl cursor-pointer" />
+        <IoAddCircleOutline onClick={onOpen} className="flex text-white text-5xl cursor-pointer" />
       </div>
       <div>
         {contacts.map((contact) => (
-          <ContactCard key={contact.id} contact={contact}/>
+          <ContactCard key={contact.id} contact={contact} />
         ))}
       </div>
     </div>
+    <Modal isOpen={isOpen} onClose={onClose} />
+    </>
   );
 }
 
