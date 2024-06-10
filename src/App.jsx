@@ -2,18 +2,15 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { IoSearch } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { FaRegUser } from "react-icons/fa";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./config/firebase";
-import { FiTrash } from "react-icons/fi";
-import { RxPencil2 } from "react-icons/rx";
 import ContactCard from "./components/ContactCard";
-import Modal from "./components/Modal";
+import AddAndUpdateContact from "./components/AddAndUpdateContact";
 
 function App() {
   const [contacts, setContacts] = useState([]);
 
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = useState(false); //for operating the modal
 
   const onOpen = () => {
     setOpen(true);
@@ -62,7 +59,7 @@ function App() {
         ))}
       </div>
     </div>
-    <Modal isOpen={isOpen} onClose={onClose} />
+        <AddAndUpdateContact isOpen={isOpen} onClose={onClose}/>
     </>
   );
 }

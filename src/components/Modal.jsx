@@ -12,9 +12,10 @@ const Modal = ({ onClose, isOpen, children }) => {
           <div className="flex justify-end ">
             <IoCloseCircleOutline
               onClick={onClose}
-              className="text-3xl "
+              className="text-3xl cursor-pointer "
             />
           </div>
+          {children}
         </div>
         <div className="absolute top-0 z-5 h-screen w-screen backdrop-blur" />
         </>
