@@ -1,9 +1,20 @@
+import { deleteDoc, doc } from 'firebase/firestore'
 import React from 'react'
 import { FaRegUser } from 'react-icons/fa'
 import { FiTrash } from 'react-icons/fi'
 import { RxPencil2 } from 'react-icons/rx'
+import { db } from '../config/firebase'
 
 const ContactCard = ({contact}) => {
+
+  const deleteContact = async(id) =>{
+    try {
+      await deleteDoc(doc(db, 'contacts', id))
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <div
             key={contact.id}
@@ -18,7 +29,7 @@ const ContactCard = ({contact}) => {
             </div>
             <div className="flex items-center gap-2">
               <RxPencil2 className="text-2xl cursor-pointer"/>
-              <FiTrash className="text-2xl cursor-pointer text-orange"/>
+              <FiTrash onClick={()=> deleteContact(contact.id)} className="text-2xl cursor-pointer text-orange"/>
             </div>
           </div>
   )
