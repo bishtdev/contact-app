@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import { IoSearch } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "./config/firebase";
 import ContactCard from "./components/ContactCard";
 import AddAndUpdateContact from "./components/AddAndUpdateContact";
@@ -13,18 +13,24 @@ function App() {
 
   const {isOpen, onClose, onOpen} = useDisclouse(); //for operating the modal
 
+  
+
   useEffect(() => {
     const getContacts = async () => {
       try {
         const contactsRef = collection(db, "contacts");
         const contactSnapshot = await getDocs(contactsRef);
-        const contactLists = contactSnapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...doc.data(),
-          };
-        });
-        setContacts(contactLists);
+
+        onSnapshot(contactsRef,(snapshot)=>{
+          const contactLists = snapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              ...doc.data(),
+            };
+          });
+          setContacts(contactLists);
+          return contactLists
+        })
       } catch (error) {
         console.log(error);
       }

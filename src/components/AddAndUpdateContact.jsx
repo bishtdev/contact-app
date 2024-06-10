@@ -1,14 +1,24 @@
 import React from "react";
 import Modal from "./Modal";
 import { Field, Form, Formik } from "formik";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
 
-const AddAndUpdateContact = ({ isOpen, onClose, isUpdate }) => {
+const AddAndUpdateContact = ({ isOpen, onClose, isUpdate, contact }) => {
   const addContact = async (contact) => {
     try {
       const contactRef = collection(db, "contacts");
       await addDoc(contactRef, contact);
+      onClose()
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const updateContact = async (contact, id) => {
+    try {
+      const contactRef = doc(db, "contacts", id);
+      await updateDoc(contactRef, contact);
+      onClose()
     } catch (error) {
       console.log(error);
     }
@@ -17,13 +27,21 @@ const AddAndUpdateContact = ({ isOpen, onClose, isUpdate }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Formik
-        initialValues={{
-          name: "",
-          email: "",
-        }}
+        initialValues={
+          isUpdate
+            ? {
+                name: contact.name,
+                email: contact.email,
+              }
+            : {
+                name: "",
+                email: "",
+              }
+        }
         onSubmit={(values) => {
-          console.log(values);
-          addContact(values)
+          isUpdate 
+          ? updateContact(values, contact.id) 
+          : addContact(values);
         }}
       >
         <Form className="flex flex-col ">
@@ -36,7 +54,7 @@ const AddAndUpdateContact = ({ isOpen, onClose, isUpdate }) => {
             <Field type="email" name="email" className="h-10 border p-1 " />
           </div>
           <button className="self-end h-30 w-[8rem] rounded-md font-mono bg-yellow mt-1 p-1 hover:bg-dark-yellow ">
-           {isUpdate ? 'Update': 'Add'} Contact
+            {isUpdate ? "Update" : "Add"} Contact
           </button>
         </Form>
       </Formik>
