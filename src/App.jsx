@@ -9,6 +9,7 @@ import AddAndUpdateContact from "./components/AddAndUpdateContact";
 import useDisclouse from "./hooks/useDisclouse";
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+import NotFoundContact from "./components/NotFoundContact";
 
 function App() {
   const [contacts, setContacts] = useState([]);
@@ -80,7 +81,7 @@ function App() {
         <IoAddCircleOutline onClick={onOpen} className="flex text-white text-5xl cursor-pointer" />
       </div>
       <div>
-        {contacts.map((contact) => (
+        { contacts.length <= 0 ? <NotFoundContact/> : contacts.map((contact) => (
           <ContactCard key={contact.id} contact={contact} />
         ))}
       </div>

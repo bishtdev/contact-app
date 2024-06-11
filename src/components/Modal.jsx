@@ -6,8 +6,9 @@ const Modal = ({ onClose, isOpen, children }) => {
   return createPortal (
     <>
       {isOpen && (
-        <>
-        <div className=" m-auto relative z-10 min-h-[200px] max-w-[380px] bg-white p-2">
+        <div 
+        className="absolute top-0 z-5 h-screen w-screen backdrop-blur">
+        <div className=" m-auto top-[10rem] relative z-10 min-h-[200px] max-w-[380px] bg-white p-2">
           
           <div className="flex justify-end ">
             <IoCloseCircleOutline
@@ -17,8 +18,7 @@ const Modal = ({ onClose, isOpen, children }) => {
           </div>
           {children}
         </div>
-        <div className="absolute top-0 z-5 h-screen w-screen backdrop-blur" />
-        </>
+        </div>
       )}
     </>,
     document.getElementById('modal-root')
